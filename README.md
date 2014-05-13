@@ -27,3 +27,6 @@ bind "h" "hover"
 bind "o" "gofast"
 bind "p" "normspeed"
 bind "l" "normgrav"
+
+This repository also includes a def folder, containing all weapon defs (only some have changes).
+Include these in pak001.pk4 in mod folder for changes to take effect.
