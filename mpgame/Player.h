@@ -412,6 +412,12 @@ public:
 	float					buyMenuCash;
 
 	float					handicap; // multiplier for damage/health
+	int						curWeaponFire; //wert
+	int						speedModif; //wert
+	int						speedNormTime; //wert
+	bool					hasNormSpeed; //wert
+	int						gravNormTime; //wert
+	bool					hasNormGrav; //wert
 
 public:
 	CLASS_PROTOTYPE( idPlayer );
@@ -785,7 +791,9 @@ private:
 	jointHandle_t			chestJoint;
 	jointHandle_t			neckLeanJoint;
 
+public: //wert
 	idPhysics_Player		physicsObj;			// player physics
+private:
 
  	idList<aasLocation_t>	aasLocation;		// for AI tracking the player
 

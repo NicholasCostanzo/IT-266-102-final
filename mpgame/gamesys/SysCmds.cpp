@@ -3052,6 +3052,77 @@ void Cmd_ListMaps_f( const idCmdArgs& args ) {
 	gameLocal.mpGame.ListMaps();
 }
 
+//wert
+void Cmd_GoUp_f( const idCmdArgs& args ){
+	idPlayer *player;
+	player = gameLocal.GetLocalPlayer();
+	if(!player){
+		return;
+	}
+	if ( gameLocal.isClient ) { //there seems to be some anti-cheating measure on clients. attempt to fix.
+		//gameLocal.Printf( "This should be working for %s\n ", player->GetName() );
+	}
+	idVec3 gravity = player->spawnArgs.GetVector( "gravityDir", "0 0 1" );
+	player->physicsObj.current.velocity += 200.0f*gravity;
+}
+
+//wert
+void Cmd_Hover_f( const idCmdArgs& args ){
+	idPlayer *player;
+	player = gameLocal.GetLocalPlayer();
+	if(!player){
+		return;
+	}
+	if ( gameLocal.isClient ) { //there seems to be some anti-cheating measure on clients. attempt to fix.
+		//gameLocal.Printf( "This should be working for %s\n ", player->GetName() );
+	}
+	idVec3 gravity = player->spawnArgs.GetVector( "gravityDir", "0 0 0" );
+	player->physicsObj.current.velocity *= gravity;
+}
+
+//wert
+void Cmd_GoFast_f( const idCmdArgs& args ){
+	idPlayer *player;
+	player = gameLocal.GetLocalPlayer();
+	if(!player){
+		return;
+	}
+	if( gameLocal.isClient) {
+		//
+	}
+	player->speedModif = 12;
+//	player->AdjustSpeedFast(player);
+}
+
+//wert
+void Cmd_NormSpeed_f( const idCmdArgs& args ){
+	idPlayer *player;
+	player = gameLocal.GetLocalPlayer();
+	if(!player){
+		return;
+	}
+	if(gameLocal.isClient){
+		//
+	}
+	player->hasNormSpeed = true;
+	player->speedModif = 2;
+	player->speedNormTime = 1000;
+}
+
+//wert
+void Cmd_NormGrav_f( const idCmdArgs& args ){
+	idPlayer *player;
+	player = gameLocal.GetLocalPlayer();
+	if(!player){
+		return;
+	}
+	if(gameLocal.isClient){
+		//
+	}
+	player->hasNormGrav = true;
+	player->gravNormTime = 1000;
+}
+
 /*
 =================
 idGameLocal::InitConsoleCommands
@@ -3106,6 +3177,13 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "playerModel",			Cmd_PlayerModel_f,			CMD_FL_GAME|CMD_FL_CHEAT,	"sets the given model on the player", idCmdSystem::ArgCompletion_Decl<DECL_MODELDEF> );
 	cmdSystem->AddCommand( "flashlight",			Cmd_Flashlight_f,			CMD_FL_GAME|CMD_FL_CHEAT,	"toggle actor's flashlight", idGameLocal::ArgCompletion_AIName );
 	
+	//wert
+	cmdSystem->AddCommand( "goup",				Cmd_GoUp_f,					CMD_FL_GAME,				"send the player upward" );
+	cmdSystem->AddCommand( "hover",				Cmd_Hover_f,				CMD_FL_GAME,				"hover player in place" );
+	cmdSystem->AddCommand( "gofast",			Cmd_GoFast_f,				CMD_FL_GAME,				"hold to go super fast" );
+	cmdSystem->AddCommand( "normspeed",			Cmd_NormSpeed_f,			CMD_FL_GAME,			"set speed back to normal for 1000 tics" );
+	cmdSystem->AddCommand( "normgrav",			Cmd_NormGrav_f,				CMD_FL_GAME,			"set gravity and jump height back to normal for 1000 tics" );
+
 	cmdSystem->AddCommand( "shuffleTeams",			Cmd_ShuffleTeams_f,			CMD_FL_GAME,				"shuffle teams" );
 // RAVEN BEGIN
 // bdube: not using id effect system

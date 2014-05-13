@@ -391,6 +391,7 @@ stateResult_t WeaponNapalmGun::State_Fire( const stateParms_t& parms ) {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
+	this->owner->curWeaponFire = -1;//wert
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {

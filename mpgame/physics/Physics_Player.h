@@ -112,9 +112,10 @@ public:	// common physics interface
 
 	void					SetClipModelNoLink( idClipModel *clip );
 
+	playerPState_t			current; //wert
 private:
 	// player physics state
-	playerPState_t			current;
+	//playerPState_t			current;
 	playerPState_t			saved;
 
 	// properties

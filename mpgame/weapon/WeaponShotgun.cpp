@@ -157,10 +157,13 @@ rvWeaponShotgun::State_Fire
 ================
 */
 stateResult_t rvWeaponShotgun::State_Fire( const stateParms_t& parms ) {
+	idVec3 gravity = spawnArgs.GetVector( "gravityDir", "0 0 1" );
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
+	this->owner->curWeaponFire = 1;//wert
+	this->owner->physicsObj.current.velocity += 413.0f*gravity;
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));

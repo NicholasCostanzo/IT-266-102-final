@@ -220,10 +220,14 @@ rvWeaponMachinegun::State_Fire
 ================
 */
 stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
+	idVec3 gravity = spawnArgs.GetVector( "gravityDir", "0 0 -1" );
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
+//wert
+	this->owner->curWeaponFire = 5;
+	this->owner->physicsObj.current.velocity += 200.0f*gravity;
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {

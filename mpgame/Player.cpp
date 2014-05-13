@@ -1347,6 +1347,13 @@ idPlayer::idPlayer() {
 	prevOnGround = true;
 	clientIdealWeaponPredictFrame = -1;
 	serverReceiveEvent = false;
+
+	curWeaponFire = -1; //wert
+	speedModif = 1;
+	speedNormTime = 0;
+	hasNormSpeed = false;
+	gravNormTime = 0;
+	hasNormGrav = false;
 }
 
 /*
@@ -8708,10 +8715,10 @@ void idPlayer::AdjustSpeed( void ) {
 	if ( influenceActive == INFLUENCE_LEVEL3 ) {
 		speed *= 0.33f;
 	}
-
+	
+	speed*=0.5*speedModif; //wert
 	physicsObj.SetSpeed( speed, pm_crouchspeed.GetFloat() );
 }
-
 /*
 ==============
 idPlayer::AdjustBodyAngles
@@ -8968,7 +8975,16 @@ void idPlayer::Move( void ) {
 
 	// set physics variables
 	physicsObj.SetMaxStepHeight( pm_stepsize.GetFloat() );
-	physicsObj.SetMaxJumpHeight( pm_jumpheight.GetFloat() );
+	idVec3 gravity = spawnArgs.GetVector( "gravityDir", "0 0 -1" );
+	if(hasNormGrav){ //wert
+		physicsObj.SetMaxJumpHeight( pm_jumpheight.GetFloat() );
+		gravity *= g_gravity.GetFloat();
+	}
+	else{//wert
+		physicsObj.SetMaxJumpHeight(210.0);
+		gravity *= 210.0f;
+	}
+	physicsObj.SetGravity(gravity);
 
 	if ( noclip ) {
 		physicsObj.SetContents( 0 );
@@ -9302,6 +9318,22 @@ Called every tic for each player
 void idPlayer::Think( void ) {
 	renderEntity_t *headRenderEnt;
 
+	if(hasNormSpeed){	//wert
+		speedModif = 2;
+		speedNormTime--;
+		if(speedNormTime < 1){
+			speedNormTime = 0;
+			hasNormSpeed = false;
+		}
+	}
+	else if(speedModif>1)speedModif -= 1; //wert
+	if(hasNormGrav){ //wert
+		gravNormTime--;
+		if(gravNormTime < 1){
+			gravNormTime = 0;
+			hasNormGrav = false;
+		}
+	}
 	if ( talkingNPC ) {
 		if ( !talkingNPC.IsValid() ) {
 			talkingNPC = NULL;
@@ -10068,6 +10100,24 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
  	int			knockback;
  	idVec3		damage_from;
  	float		attackerPushScale;
+
+	idVec3 gravity;// = spawnArgs.GetVector( "gravityDir", "0 0 -1" );
+	if(inflictor && attacker && (attacker != this)){	//RC //wert
+		if(static_cast<const idPlayer*>(attacker)->curWeaponFire == 6){
+			gravity = spawnArgs.GetVector( "gravityDir", "0 0 -1" );
+			gameLocal.Printf("krang");
+			physicsObj.current.velocity += 200.0f*gravity;
+			//static_cast<const idPlayer*>(attacker)->physicsObj.current.velocity += 200.0f*gravity;
+		}
+		else if(static_cast<const idPlayer*>(attacker)->curWeaponFire == 4){
+			gravity = spawnArgs.GetVector( "gravityDir", "0 0 1" );
+			physicsObj.current.velocity += 100.0f*gravity;
+		}
+	}
+	//if(attacker->curWeaponFire == 6){
+	//	gameLocal.Printf("krang");
+	//}
+	//gameLocal.Printf(" [%s]\n", inflictor->GetEntityDefName() ); //wert
 
 	float modifiedDamageScale = damageScale;
 	

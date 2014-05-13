@@ -468,6 +468,7 @@ stateResult_t rvWeaponGauntlet::State_Fire( const stateParms_t& parms ) {
 		STAGE_END,
 		STAGE_END_WAIT
 	};	
+	this->owner->curWeaponFire = -1;//wert
 	switch ( parms.stage ) {
 		case STAGE_START:	
 			PlayAnim( ANIMCHANNEL_ALL, "attack_start", parms.blendFrames );
